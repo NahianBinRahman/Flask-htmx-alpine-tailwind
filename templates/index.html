@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/static/src/main.css" />
+    <script src="https://unpkg.com/htmx.org@2.0.3"></script>
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.1/dist/cdn.min.js"
+    ></script>
+    <title>Flask + Tailwind + HTMX</title>
+  </head>
+  <body
+    class="bg-gray-100 flex flex-col items-center justify-start min-h-screen p-4"
+  >
+    <!-- Counter Component -->
+    <div
+      class="bg-white p-8 rounded shadow-md text-center mb-6 w-full max-w-md"
+    >
+      <h1 class="text-xl font-bold mb-4">Counter</h1>
+      <div x-data="{ count: 0 }" class="flex flex-col items-center">
+        <button
+          x-on:click="count++"
+          class="bg-blue-500 text-white p-2 rounded hover:bg-blue-600 transition duration-200"
+        >
+          Increment
+        </button>
+        <span class="mt-4 text-2xl font-semibold" x-text="count"></span>
+      </div>
+    </div>
+
+    <!-- Load HTMX -->
+    <div class="bg-white p-8 mb-6 rounded shadow-md w-full max-w-md">
+      <h1 class="text-xl font-bold mb-4">Load Partial Response</h1>
+      <button
+        hx-get="/get-response"
+        hx-target="#response"
+        hx-swap="innerHTML"
+        class="bg-blue-500 text-white p-2 rounded hover:bg-blue-600 transition duration-200"
+      >
+        Load Response
+      </button>
+      <div id="response" class="mt-4"></div>
+    </div>
+
+    <!-- Upload Image Section -->
+    <div class="bg-white p-8 rounded shadow-md mb-6 w-full max-w-md">
+      <h1 class="text-xl font-bold mb-4">Upload Image to Cloudinary</h1>
+      <form
+        method="POST"
+        action="/upload"
+        enctype="multipart/form-data"
+        hx-target="#upload-response"
+        hx-swap="innerHTML"
+      >
+        <input type="file" name="image" required class="mb-4" />
+        <button
+          type="submit"
+          class="bg-blue-500 text-white p-2 rounded hover:bg-blue-600 transition duration-200"
+        >
+          Upload Image
+        </button>
+      </form>
+      <div id="upload-response" class="mt-4"></div>
+    </div>
+
+    <!-- Display Static Image -->
+    <div class="bg-white p-8 rounded shadow-md w-full max-w-md">
+      <h1 class="text-xl font-bold mb-4">Static Image</h1>
+      <img
+        src="{{ url_for('static', filename='images/nahian.jpg') }}"
+        alt="Example Image"
+        class="mt-2"
+        style="max-width: 100%"
+      />
+    </div>
+  </body>
+</html>
